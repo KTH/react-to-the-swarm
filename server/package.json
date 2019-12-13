@@ -1,0 +1,13 @@
+{
+    "name": "react-to-docker-api",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "express": "^4.17.1",
+        "node-docker-api": "^1.1.22"
+    },
+    "scripts": {
+        "start": "node --experimental-modules server.mjs"
+    },
+    "devDependencies": {}
+}

@@ -1,23 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+
+  const [ containers, setContainers ] = useState();
+
+  useEffect(() => {
+    const c = async () => {
+        var result = await fetch('http://localhost:3001/containers');
+        var resultJson = await result.json();
+        setContainers(resultJson);
+    }
+    c();
+  });
+  
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {containers}
       </header>
     </div>
   );
