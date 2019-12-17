@@ -3,6 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "cors": "^2.8.5",
+        "dockerode": "^3.0.2",
         "express": "^4.17.1",
         "node-docker-api": "^1.1.22"
     },
