@@ -5,7 +5,9 @@ function Service(props) {
 
     const [tasks, setTasks] = useState([]);
     const [logData, setLogData] = useState('');
+    const [statsData, setStatsData] = useState([]);
     const [showLogs, setShowLogs] = useState(false);
+    const [showStats, setShowStats] = useState(false);
 
     useEffect(() => {
         let logReader = null;
@@ -26,19 +28,47 @@ function Service(props) {
                 }
             )
         }
+        const getStats = async() => {
+            console.log('In getStats');
+            let sd = await Promise.all(tasks.map(async t => {
+                const id = t['ID'];
+                var result = await fetch(`http://localhost:3001/tasks/${id}/stats`);
+                var resultJson = await result.json();
+                return {
+                    'id': id, 
+                    'mem': bytesToMb(resultJson['memory_stats']['usage'])
+                }
+            }));
+            setStatsData(sd);
+        }
+
         getTasks();
         if (showLogs) {
             getLogs();
         }
-        else {
+        else 
+        {
             closeLogReader(logReader);
+        }
+        if (showStats) {
+            getStats();
+        }
+        else 
+        {
+            setStatsData([]);
         }
 
         // clean up
         return (() => { 
             closeLogReader(logReader);
         });
-    }, [props.service, showLogs]);
+    }, [props.service, showLogs, showStats]);
+
+    var bytesToMb = (bytes) => {
+        const asInt = parseInt(bytes);
+        const MBs = asInt/(1024*1024);
+        return `${MBs.toFixed(2)} Mb`;
+    }
 
     var logReaderOpen = (logReader) => {
         return logReader !== null && logReader.closed;
@@ -51,11 +81,14 @@ function Service(props) {
     var logBlock = () => {
         if (showLogs) {
             return (
-                <pre>
-                    <code style={{fontSize: '10px', whiteSpace: 'pre'}}>
-                        {logData}
-                    </code>
-                </pre>
+                <React.Fragment>
+                    <br />
+                    <pre>
+                        <code style={{fontSize: '10px', whiteSpace: 'pre'}}>
+                            {logData}
+                        </code>
+                    </pre>
+                </React.Fragment>
             );
         }
         else {
@@ -63,8 +96,33 @@ function Service(props) {
         }
     }
 
+    var statsBlock = () => {
+        if (showStats) {
+            return (
+                statsData.map(d => {
+                    return (
+                        <React.Fragment>
+                            <br />
+                            <pre key={d.id}>
+                                <code>{d.id.substring(0, 5)}.. : {d.mem}</code>
+                            </pre>
+                        </React.Fragment>
+                    );
+                })
+            )
+        }
+        else 
+        {
+            return <React.Fragment />;
+        }
+    }
+
     var handleLogClick = () => {
         setShowLogs(!showLogs);
+    }
+
+    var handleStatClick = () => {
+        setShowStats(!showStats);
     }
 
     return (
@@ -77,9 +135,11 @@ function Service(props) {
                     <React.Fragment>
                         REPLICAS <br />{tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
                         <br /><br />
+                        <Button style={{marginRight: '10px'}} onClick={handleStatClick}>STATS</Button>
                         <Button onClick={handleLogClick}>LOGS</Button>
                         <br />
                     </React.Fragment>
+                    {statsBlock()}
                     {logBlock()}
                 </Card.Body>
             </Card>

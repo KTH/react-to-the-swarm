@@ -45,6 +45,19 @@ app.get('/services/:service_name/logs', async (req, res, next) => {
     }
 });
 
+app.get('/tasks/:taskid/stats', async (req, res, next) => {
+    try {
+        let theTask = await docker.getTask(req.params.taskid);
+        const taskDetails = await theTask.inspect();
+        const containerId = taskDetails['Status']['ContainerStatus']['ContainerID'];
+        const container = await docker.getContainer(containerId);
+        const containerStats = await container.stats({'stream': false});
+        res.json(containerStats);
+    } catch (e) {
+        res.send('Error: ' + e);
+    }
+});
+
 app.get('/services', async (req, res, next) => {
     try {
         let services = await docker.listServices();
