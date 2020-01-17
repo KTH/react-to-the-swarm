@@ -5,7 +5,7 @@ function Service(props) {
 
     const [tasks, setTasks] = useState([]);
     const [logData, setLogData] = useState('');
-    const [showLogs, setShowLogs] = useState(false); 
+    const [showLogs, setShowLogs] = useState(false);
 
     useEffect(() => {
         let logReader = null;
