@@ -20,6 +20,7 @@ function Service(props) {
             logReader.read().then(
                 function process({done, value}) {
                     if (done) return;
+                    // Append to top
                     setLogData(d => new TextDecoder("utf-8").decode(value) + d);
                     return logReader.read().then(process); 
                 }
@@ -30,25 +31,35 @@ function Service(props) {
             getLogs();
         }
         else {
-            if (logReader !== null && logReader.closed) logReader.cancel();
+            closeLogReader(logReader);
         }
 
         // clean up
         return (() => { 
-            if (logReader !== null && logReader.closed) logReader.cancel();
+            closeLogReader(logReader);
         });
     }, [props.service, showLogs]);
+
+    var logReaderOpen = (logReader) => {
+        return logReader !== null && logReader.closed;
+    }
+
+    var closeLogReader = (logReader) => {
+        if (logReaderOpen(logReader)) logReader.cancel();
+    }
 
     var logBlock = () => {
         if (showLogs) {
             return (
-                <code style={{fontSize: '10px', whiteSpace: 'pre'}}>
-                    {logData}
-                </code>
+                <pre>
+                    <code style={{fontSize: '10px', whiteSpace: 'pre'}}>
+                        {logData}
+                    </code>
+                </pre>
             );
         }
         else {
-            return (<React.Fragment></React.Fragment>);
+            return <React.Fragment />;
         }
     }
 
@@ -64,7 +75,7 @@ function Service(props) {
                 </Card.Header>
                 <Card.Body style={{maxHeight: '300px', overflowY: 'auto'}}>
                     <React.Fragment>
-                        REPLICAS: {tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
+                        REPLICAS <br />{tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
                         <br /><br />
                         <Button onClick={handleLogClick}>LOGS</Button>
                         <br />
