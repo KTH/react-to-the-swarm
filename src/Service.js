@@ -7,7 +7,6 @@ function Service(props) {
     const [logData, setLogData] = useState('');
 
     useEffect(() => {
-        var subscription;
         const getTasks = async () => {
             var result = await fetch(`http://localhost:3001/services/${props.service.Spec.Name}/tasks`);
             var resultJson = await result.json();
@@ -33,10 +32,14 @@ function Service(props) {
                 <Card.Header>
                     {JSON.stringify(props.service.Spec.Name).replace(/"/g, '')}
                 </Card.Header>
-                <Card.Body>
-                    Target replicas: {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)} <br />
-                    Tasks: {tasks.length}
-                    Logs: {logData}
+                <Card.Body style={{maxHeight: '300px', overflowY: 'auto'}}>
+                    <React.Fragment>
+                        REPLICAS: {tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)} <br />
+                        LOGS: <br />
+                    </React.Fragment>
+                    <code style={{fontSize: '10px', whiteSpace: 'pre'}}>
+                        {logData}
+                    </code>
                 </Card.Body>
             </Card>
         </Col>
