@@ -30,11 +30,11 @@ function Service(props) {
         <Col key={props.service.ID} xs={12 / props.columns}>
             <Card className="text-dark">
                 <Card.Header>
-                    {JSON.stringify(props.service.Spec.Name).replace(/"/g, '')}
+                    Service: {JSON.stringify(props.service.Spec.Name).replace(/"/g, '')}
                 </Card.Header>
                 <Card.Body style={{maxHeight: '300px', overflowY: 'auto'}}>
                     <React.Fragment>
-                        REPLICAS <br />{tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
+                        Replicas <br />{tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
                         <br /><br />
                         <Button style={{marginRight: '10px'}} onClick={handleStatClick}>STATS</Button>
                         <Button onClick={handleLogClick}>LOGS</Button>

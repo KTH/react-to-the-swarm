@@ -76,8 +76,7 @@ function ServiceStats(props) {
             statsData.map(d => {
                 return (
                     <React.Fragment key={d.id}>
-                        <br />
-                        <pre key={d.id}>
+                        <pre key={d.id} style={{marginBottom: '0px'}}>
                             <code style={{fontSize: '12px'}}>
                                 {d.id.substring(0, 5)}.. mem: {d.memUsage} ({d.memPercent}), cpu: {d.cpuPercent}
                             </code>

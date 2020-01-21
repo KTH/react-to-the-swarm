@@ -51,10 +51,8 @@ function ServiceLogs(props) {
         return (
             <React.Fragment>
                 <br />
-                <pre>
-                    <code style={{fontSize: '10px', whiteSpace: 'pre'}}>
-                        {logData}
-                    </code>
+                <pre style={{marginBottom: '0px'}}>
+                    <code style={{fontSize: '10px', whiteSpace: 'pre'}}>{logData}</code>
                 </pre>
             </React.Fragment>
         );
