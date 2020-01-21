@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
 
   const [services, setServices] = useState([]);
-  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     const getServices = async () => {
@@ -33,14 +32,16 @@ function App() {
 
   function serviceCards() {
     const columns = 3;
+    let chunkNr = 0;
     let serviceChunks = chunk(services, columns);
     return (
-      serviceChunks.map(c => {
+      serviceChunks.map(chunk => {
+        chunkNr++;
         return (
-          <React.Fragment>
+          <React.Fragment key={chunkNr}>
             <Row>
-              {c.map(s => {
-                return <Service service={s} columns={columns}></Service>
+              {chunk.map(service => {
+                return <Service key={service.ID} service={service} columns={columns}></Service>
               })}
             </Row>
             <br />
