@@ -7,6 +7,12 @@ function ServiceStats(props) {
     let [isLoading, setIsLoading] = useState(false);
     let updateTimer = null;
 
+    /*
+        var cpuDelta = res.cpu_stats.cpu_usage.total_usage -  res.precpu_stats.cpu_usage.total_usage;
+        var systemDelta = res.cpu_stats.system_cpu_usage - res.precpu_stats.system_cpu_usage;
+        var RESULT_CPU_USAGE = cpuDelta / systemDelta * 100;
+    */
+
     useEffect(() => {
         const getStats = async(showSpinner) => {
             if (showSpinner) setIsLoading(true);
@@ -16,9 +22,10 @@ function ServiceStats(props) {
                 var resultJson = await result.json();
                 return {
                     'id': id, 
-                    'mem': bytesToMb(resultJson['memory_stats']['usage']),
-                    'usage': usageAndLimitToPercent(resultJson['memory_stats']['usage'], 
-                        resultJson['memory_stats']['limit']) 
+                    'memUsage': bytesToMb(resultJson['memory_stats']['usage']),
+                    'memPercent': usageAndLimitToPercent(resultJson['memory_stats']['usage'], 
+                        resultJson['memory_stats']['limit']),
+                    'cpuPercent': cpuUsage(resultJson['cpu_stats'], resultJson['precpu_stats'])
                 }
             }));
             setStatsData(statData);
@@ -37,6 +44,12 @@ function ServiceStats(props) {
             }
         }
     }, [props.showStats, props.tasks])
+
+    var cpuUsage = (cpu_stats, precpu_stats) => {
+        var cpuDelta = parseInt(cpu_stats.cpu_usage.total_usage) -  parseInt(precpu_stats.cpu_usage.total_usage);
+        var systemDelta = parseInt(cpu_stats.system_cpu_usage) -  parseInt(precpu_stats.system_cpu_usage);
+        return `${((cpuDelta/systemDelta) * 100).toFixed(2)}%`;
+    }
  
     var bytesToMb = (bytes) => {
         const asInt = parseInt(bytes);
@@ -47,7 +60,7 @@ function ServiceStats(props) {
     var usageAndLimitToPercent = (usage, limit) => {
         const usageAsInt = parseInt(usage);
         const limitAsInt = parseInt(limit);
-        return `${((usageAsInt/limitAsInt) * 100).toFixed(2)} %`;
+        return `${((usageAsInt/limitAsInt) * 100).toFixed(2)}%`;
     }
 
     if (isLoading) {
@@ -65,8 +78,8 @@ function ServiceStats(props) {
                     <React.Fragment key={d.id}>
                         <br />
                         <pre key={d.id}>
-                            <code style={{fontSize: '16px'}}>
-                                {d.id.substring(0, 5)}.. : {d.mem} ({d.usage})
+                            <code style={{fontSize: '12px'}}>
+                                {d.id.substring(0, 5)}.. mem: {d.memUsage} ({d.memPercent}), cpu: {d.cpuPercent}
                             </code>
                         </pre>
                     </React.Fragment>
