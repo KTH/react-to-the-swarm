@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import Spinner from './Spinner.js';
 
 function ServiceStats(props) {
 
@@ -40,7 +40,6 @@ function ServiceStats(props) {
             setStatsData([]);
             if (updateTimer !== null) {
                 clearInterval(updateTimer);
-                updateTimer = null;
             }
         }
     }, [props.showStats, props.tasks])
@@ -67,7 +66,7 @@ function ServiceStats(props) {
         return (
             <React.Fragment>
                 <br />
-                <Spinner animation="border" role="status" />
+                <Spinner />
             </React.Fragment>
         );
     }
@@ -76,7 +75,7 @@ function ServiceStats(props) {
             statsData.map(d => {
                 return (
                     <React.Fragment key={d.id}>
-                        <pre key={d.id} style={{marginBottom: '0px'}}>
+                        <pre key={d.id} style={{lineHeight: '12px', marginBottom: '0px'}}>
                             <code style={{fontSize: '12px'}}>
                                 {d.id.substring(0, 5)}.. mem: {d.memUsage} ({d.memPercent}), cpu: {d.cpuPercent}
                             </code>

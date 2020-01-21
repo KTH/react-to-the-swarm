@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import Spinner from './Spinner.js';
 
 function ServiceLogs(props) {
 
@@ -43,7 +43,7 @@ function ServiceLogs(props) {
         return (
             <React.Fragment>
                 <br />
-                <Spinner animation="border" role="status" />
+                <Spinner />
             </React.Fragment>
         );
     }
@@ -51,7 +51,7 @@ function ServiceLogs(props) {
         return (
             <React.Fragment>
                 <br />
-                <pre style={{marginBottom: '0px'}}>
+                <pre style={{margin: '0px', lineHeight: '10px'}}>
                     <code style={{fontSize: '10px', whiteSpace: 'pre'}}>{logData}</code>
                 </pre>
             </React.Fragment>
