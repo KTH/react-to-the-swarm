@@ -56,3 +56,9 @@ code {
 .stats-code {
   font-size: 12px;
 }
+
+.detail-property {
+  text-align: right;
+  padding-top: 10px;
+}
+

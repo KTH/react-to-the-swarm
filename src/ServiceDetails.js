@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, Container, Col, Row } from 'react-bootstrap';
 
 function ServiceDetails(props) {
 
@@ -26,21 +26,38 @@ function ServiceDetails(props) {
                 {props.service.Spec.TaskTemplate.ContainerSpec.Image.replace(/@.+/g, '')}
             </div>
             <div className="service-subheader">
-                Running replicas
+                Replicas
             </div>
-            <div className="service-details">
-                <Alert variant={alertRunningVariant}>
-                    {runningTasks.length} / {JSON.stringify(getReplicas())}
-                </Alert>
-            </div>
-            <div className="service-subheader">
-                <Alert variant={alertFailedVariant}>
-                    Failed replicas: {failedTasks.length}
-                </Alert>
-            </div>
-            <div className="service-subheader  service-bottom-spacing">
-                Shut down replicas: {shutdownTasks.length}
-            </div>
+            <Container>
+                <div className="service-details">
+                        <Row>
+                            <Col className="detail-property">Running</Col>
+                            <Col>
+                                <Alert variant={alertRunningVariant}>
+                                    {runningTasks.length} / {JSON.stringify(getReplicas())}
+                                </Alert>
+                            </Col>
+                        </Row>
+                </div>
+                <div className="service-details">
+                    <Row>
+                        <Col className="detail-property">Failed</Col>
+                        <Col>
+                            <Alert variant={alertFailedVariant}>
+                                {failedTasks.length}
+                            </Alert>
+                        </Col>
+                    </Row>
+                </div>
+                <div className="service-details service-bottom-spacing">
+                    <Row>   
+                        <Col style={{textAlign: 'right'}}>Shut down</Col>
+                        <Col>
+                            {shutdownTasks.length}
+                        </Col>
+                    </Row>
+                </div>
+            </Container>
             <Button className="service-right-spacing" onClick={props.handleStatClick}>Stats</Button>
             <Button onClick={props.handleLogClick}>Logs</Button>
         </div>
