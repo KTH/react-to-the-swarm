@@ -4,14 +4,14 @@ import { useObserver } from 'mobx-react';
 import ServiceLogs from './ServiceLogs.js';
 import ServiceStats from './ServiceStats.js';
 import ServiceDetails from './ServiceDetails.js';
-import ctx from './AppContext.js';
+//import ctx from './AppContext.js';
 
 function Service(props) {
 
     let [tasks, setTasks] = useState([]);
     let [showLogs, setShowLogs] = useState(false);
     let [showStats, setShowStats] = useState(false);
-    const store = React.useContext(ctx);
+    //const store = React.useContext(ctx);
 
     useEffect(() => {
         const getTasks = async () => {
@@ -23,29 +23,15 @@ function Service(props) {
     }, [props.service]);
 
     const handleLogClick = () => {
-        if (store.shownServiceId !== props.service.ID) {
-            setShowLogs(true);
-            setShowStats(false);
-        }
-        else {
-            setShowLogs(!showLogs);
-        }
-        store.setShownServiceId(props.service.ID);
+        setShowLogs(!showLogs);
     }
 
     const handleStatClick = () => {
-        if (store.shownServiceId !== props.service.ID) {
-            setShowStats(true);
-            setShowLogs(false);
-        }
-        else {
-            setShowStats(!showStats);
-        }
-        store.setShownServiceId(props.service.ID);
+        setShowStats(!showStats);
     }
 
     const serviceStats = () => {
-        if (showStats && store.shownServiceId === props.service.ID) {
+        if (showStats) {
             return (
                 <ServiceStats tasks={tasks}/>
             );
@@ -53,7 +39,7 @@ function Service(props) {
     }
 
     const serviceLogs = () => {
-        if (showLogs && store.shownServiceId === props.service.ID) {
+        if (showLogs) {
             return (
                 <ServiceLogs service={props.service}/>
             );

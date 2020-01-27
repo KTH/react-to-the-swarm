@@ -33,7 +33,6 @@ function ServiceLogs(props) {
         }
 
         getLogs();
-        //props.showLogs ? getLogs() : closeLogReader(logReader);
         // clean up
         return (() => { 
             closeLogReader(logReader);

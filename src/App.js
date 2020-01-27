@@ -8,6 +8,7 @@ import { AppContext } from './AppContext.js';
 function App() {
 
   const [services, setServices] = useState([]);
+  const [columns, setColumns] = useState(3);
 
   useEffect(() => {
     const getServices = async () => {
@@ -15,7 +16,14 @@ function App() {
       var resultJson = await result.json();
       setServices(resultJson);
     }
+    const updateColumns = () => {
+      if (window.innerWidth < 1000 && window.innerWidth > 500) setColumns(2);
+      else if (window.innerWidth <= 500) setColumns(1);
+      else setColumns(3);
+    }
+    window.addEventListener('resize', updateColumns);
     getServices();
+    return () => window.removeEventListener('resize', updateColumns);
   }, []);
 
   useEffect(() => {
@@ -32,7 +40,6 @@ function App() {
   }
 
   function serviceCards() {
-    const columns = 3;
     let chunkNr = 0;
     let serviceChunks = chunk(services, columns);
     return (
