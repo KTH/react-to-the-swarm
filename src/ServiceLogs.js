@@ -32,12 +32,13 @@ function ServiceLogs(props) {
             setIsLoading(false);
         }
 
-        props.showLogs ? getLogs() : closeLogReader(logReader);
+        getLogs();
+        //props.showLogs ? getLogs() : closeLogReader(logReader);
         // clean up
         return (() => { 
             closeLogReader(logReader);
         });
-    }, [props.showLogs, props.service])
+    }, [props.service])
 
     if (isLoading) {
         return (
@@ -47,7 +48,7 @@ function ServiceLogs(props) {
             </React.Fragment>
         );
     }
-    else if (props.showLogs) {
+    else {
         return (
             <React.Fragment>
                 <br />
@@ -56,9 +57,6 @@ function ServiceLogs(props) {
                 </pre>
             </React.Fragment>
         );
-    }
-    else {
-        return <React.Fragment />;
     }
 
 }

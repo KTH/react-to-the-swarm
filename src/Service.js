@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Button } from 'react-bootstrap';
+import { Card, Col } from 'react-bootstrap';
+import { useObserver } from 'mobx-react';
 import ServiceLogs from './ServiceLogs.js';
 import ServiceStats from './ServiceStats.js';
+import ServiceDetails from './ServiceDetails.js';
+import ctx from './AppContext.js';
 
 function Service(props) {
 
     let [tasks, setTasks] = useState([]);
     let [showLogs, setShowLogs] = useState(false);
     let [showStats, setShowStats] = useState(false);
+    const store = React.useContext(ctx);
 
     useEffect(() => {
         const getTasks = async () => {
@@ -19,33 +23,61 @@ function Service(props) {
     }, [props.service]);
 
     const handleLogClick = () => {
-        setShowLogs(!showLogs);
+        if (store.shownServiceId !== props.service.ID) {
+            setShowLogs(true);
+            setShowStats(false);
+        }
+        else {
+            setShowLogs(!showLogs);
+        }
+        store.setShownServiceId(props.service.ID);
     }
 
     const handleStatClick = () => {
-        setShowStats(!showStats);
+        if (store.shownServiceId !== props.service.ID) {
+            setShowStats(true);
+            setShowLogs(false);
+        }
+        else {
+            setShowStats(!showStats);
+        }
+        store.setShownServiceId(props.service.ID);
     }
 
-    return (
+    const serviceStats = () => {
+        if (showStats && store.shownServiceId === props.service.ID) {
+            return (
+                <ServiceStats tasks={tasks}/>
+            );
+        }
+    }
+
+    const serviceLogs = () => {
+        if (showLogs && store.shownServiceId === props.service.ID) {
+            return (
+                <ServiceLogs service={props.service}/>
+            );
+        }
+    }
+
+    return useObserver(() => (
         <Col key={props.service.ID} xs={12 / props.columns}>
             <Card className="text-dark">
-                <Card.Header>
+                <Card.Header style={{fontWeight: 'bold'}}>
                     {JSON.stringify(props.service.Spec.Name).replace(/"/g, '')}
                 </Card.Header>
                 <Card.Body style={{maxHeight: '500px', overflowY: 'auto'}}>
-                    <div style={{marginBottom: '10px'}}>
-                        <div style={{marginBottom: '10px', fontSize: '16px'}}>
-                            Replicas <br />{tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
-                        </div>
-                        <Button style={{marginRight: '10px'}} onClick={handleStatClick}>Stats</Button>
-                        <Button onClick={handleLogClick}>Logs</Button>
-                    </div>
-                    <ServiceStats showStats={showStats} tasks={tasks}/>
-                    <ServiceLogs showLogs={showLogs} service={props.service}/>
+                    <ServiceDetails 
+                        tasks={tasks}
+                        service={props.service}
+                        handleLogClick={handleLogClick}
+                        handleStatClick={handleStatClick} />
+                    {serviceStats()}
+                    {serviceLogs()}
                 </Card.Body>
             </Card>
         </Col>
-    )
+    ));
 
 }
 

@@ -3,6 +3,7 @@ import { Container, Row } from 'react-bootstrap';
 import Service from './Service';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { AppContext } from './AppContext.js';
 
 function App() {
 
@@ -52,13 +53,15 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <Container>
-          {serviceCards()}
-        </Container>
-      </header>
-    </div>
+    <AppContext>
+      <div className="App">
+        <header className="App-header">
+          <Container>
+            {serviceCards()}
+          </Container>
+        </header>
+      </div>
+    </AppContext>
   );
 }
 

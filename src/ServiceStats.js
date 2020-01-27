@@ -27,19 +27,17 @@ function ServiceStats(props) {
         }
 
         const stopUpdate = () => {
-            setStatsData([]);
             if (updateTimer !== null) {
                 clearInterval(updateTimer);
-                setUpdateTimer(null);
             }
         }
 
-        if (props.showStats && updateTimer === null) {
+        if (updateTimer === null) {
             getStats(true);
             setUpdateTimer(setInterval(() => {getStats(false);}, 3000));
         }
         return stopUpdate;
-    }, [props.showStats, props.tasks, updateTimer])
+    }, [props.tasks, updateTimer])
 
     const cpuUsage = (cpu_stats, precpu_stats) => {
         const totalUsageTotal = parseInt(cpu_stats.cpu_usage.total_usage);
@@ -71,7 +69,7 @@ function ServiceStats(props) {
             </React.Fragment>
         );
     }
-    else if (props.showStats) {
+    else {
         return (
             statsData.map(d => {
                 return (
@@ -85,10 +83,6 @@ function ServiceStats(props) {
                 );
             })
         )
-    }
-    else 
-    {
-        return <React.Fragment />;
     }
     
 }
