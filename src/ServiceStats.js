@@ -10,7 +10,8 @@ function ServiceStats(props) {
     useEffect(() => {
         const getStats = async(showSpinner) => {
             if (showSpinner) setIsLoading(true);
-            let statData = await Promise.all(props.tasks.map(async task => {
+            let tasks = props.tasks.filter(t => t.Status.State === 'running');
+            let statData = await Promise.all(tasks.map(async task => {
                 const id = task['ID'];
                 var result = await fetch(`http://localhost:3001/tasks/${id}/stats`);
                 var resultJson = await result.json();
