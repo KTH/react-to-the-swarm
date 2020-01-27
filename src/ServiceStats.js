@@ -5,7 +5,7 @@ function ServiceStats(props) {
 
     let [statsData, setStatsData] = useState([]);
     let [isLoading, setIsLoading] = useState(false);
-    let updateTimer = null;
+    let [updateTimer, setUpdateTimer] = useState(null);
 
     useEffect(() => {
         const getStats = async(showSpinner) => {
@@ -26,19 +26,22 @@ function ServiceStats(props) {
             if (showSpinner) setIsLoading(false);
         }
 
-        if (props.showStats) {
-            getStats(true);
-            setInterval(() => {getStats(false);}, 3000);
-        }
-        else {
+        const stopUpdate = () => {
             setStatsData([]);
             if (updateTimer !== null) {
                 clearInterval(updateTimer);
+                setUpdateTimer(null);
             }
         }
-    }, [props.showStats, props.tasks])
 
-    cpuUsage = (cpu_stats, precpu_stats) => {
+        if (props.showStats && updateTimer === null) {
+            getStats(true);
+            setUpdateTimer(setInterval(() => {getStats(false);}, 3000));
+        }
+        return stopUpdate;
+    }, [props.showStats, props.tasks, updateTimer])
+
+    const cpuUsage = (cpu_stats, precpu_stats) => {
         const totalUsageTotal = parseInt(cpu_stats.cpu_usage.total_usage);
         const preTotalUsageTotal = parseInt(precpu_stats.cpu_usage.total_usage);
         var totalDelta = totalUsageTotal - preTotalUsageTotal;
@@ -48,13 +51,13 @@ function ServiceStats(props) {
         return `${((totalDelta/systemDelta) * 100).toFixed(2)}%`;
     }
  
-    bytesToMb = (bytes) => {
+    const bytesToMb = (bytes) => {
         const asInt = parseInt(bytes);
         const MBs = asInt/(1024*1024);
         return `${MBs.toFixed(2)} Mb`;
     }
 
-    usageAndLimitToPercent = (usage, limit) => {
+    const usageAndLimitToPercent = (usage, limit) => {
         const usageAsInt = parseInt(usage);
         const limitAsInt = parseInt(limit);
         return `${((usageAsInt/limitAsInt) * 100).toFixed(2)}%`;
