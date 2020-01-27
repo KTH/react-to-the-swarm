@@ -16,8 +16,8 @@ code {
   font-weight: bold;
 }
 
-.sevice-body {
-  max-height: 500px;
+.service-body {
+  max-height: 700px;
   overflow-y: auto;
 }
 
