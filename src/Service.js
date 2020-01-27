@@ -18,6 +18,7 @@ function Service(props) {
             var result = await fetch(`http://localhost:3001/services/${props.service.Spec.Name}/tasks`);
             var resultJson = await result.json();
             setTasks(resultJson);
+            console.log(JSON.stringify(resultJson));
         };
         getTasks();
     }, [props.service]);
