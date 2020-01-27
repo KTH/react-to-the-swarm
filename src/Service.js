@@ -18,11 +18,11 @@ function Service(props) {
         getTasks();
     }, [props.service]);
 
-    var handleLogClick = () => {
+    handleLogClick = () => {
         setShowLogs(!showLogs);
     }
 
-    var handleStatClick = () => {
+    handleStatClick = () => {
         setShowStats(!showStats);
     }
 

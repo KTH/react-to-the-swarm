@@ -7,12 +7,6 @@ function ServiceStats(props) {
     let [isLoading, setIsLoading] = useState(false);
     let updateTimer = null;
 
-    /*
-        var cpuDelta = res.cpu_stats.cpu_usage.total_usage -  res.precpu_stats.cpu_usage.total_usage;
-        var systemDelta = res.cpu_stats.system_cpu_usage - res.precpu_stats.system_cpu_usage;
-        var RESULT_CPU_USAGE = cpuDelta / systemDelta * 100;
-    */
-
     useEffect(() => {
         const getStats = async(showSpinner) => {
             if (showSpinner) setIsLoading(true);
@@ -44,19 +38,23 @@ function ServiceStats(props) {
         }
     }, [props.showStats, props.tasks])
 
-    var cpuUsage = (cpu_stats, precpu_stats) => {
-        var cpuDelta = parseInt(cpu_stats.cpu_usage.total_usage) -  parseInt(precpu_stats.cpu_usage.total_usage);
-        var systemDelta = parseInt(cpu_stats.system_cpu_usage) -  parseInt(precpu_stats.system_cpu_usage);
-        return `${((cpuDelta/systemDelta) * 100).toFixed(2)}%`;
+    cpuUsage = (cpu_stats, precpu_stats) => {
+        const totalUsageTotal = parseInt(cpu_stats.cpu_usage.total_usage);
+        const preTotalUsageTotal = parseInt(precpu_stats.cpu_usage.total_usage);
+        var totalDelta = totalUsageTotal - preTotalUsageTotal;
+        const systemCpuUsage = parseInt(cpu_stats.system_cpu_usage);
+        const systemPreCupUsage = parseInt(precpu_stats.system_cpu_usage);
+        var systemDelta = systemCpuUsage - systemPreCupUsage;  
+        return `${((totalDelta/systemDelta) * 100).toFixed(2)}%`;
     }
  
-    var bytesToMb = (bytes) => {
+    bytesToMb = (bytes) => {
         const asInt = parseInt(bytes);
         const MBs = asInt/(1024*1024);
         return `${MBs.toFixed(2)} Mb`;
     }
 
-    var usageAndLimitToPercent = (usage, limit) => {
+    usageAndLimitToPercent = (usage, limit) => {
         const usageAsInt = parseInt(usage);
         const limitAsInt = parseInt(limit);
         return `${((usageAsInt/limitAsInt) * 100).toFixed(2)}%`;
