@@ -8,23 +8,23 @@ function ServiceDetails(props) {
         "success" : "danger";
 
     return (
-        <div style={{marginBottom: '10px'}}>
-        <div style={{fontSize: '16px', fontWeight: 'bold'}}>
-            Image
-        </div>
-        <div style={{fontSize: '16px'}}>
-            {props.service.Spec.TaskTemplate.ContainerSpec.Image.replace(/@.+/g, '')}
-        </div>
-        <div style={{fontSize: '16px', fontWeight: 'bold'}}>
-            Replicas
-        </div>
-        <div style={{marginBottom: '10px', fontSize: '16px'}}>
-            <Alert variant={alertVariant}>
-                {props.tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
-            </Alert>
-        </div>
-        <Button style={{marginRight: '10px'}} onClick={props.handleStatClick}>Stats</Button>
-        <Button onClick={props.handleLogClick}>Logs</Button>
+        <div className="service-bottom-spacing">
+            <div className="service-subheader">
+                Image
+            </div>
+            <div className="service-details">
+                {props.service.Spec.TaskTemplate.ContainerSpec.Image.replace(/@.+/g, '')}
+            </div>
+            <div className="service-subheader">
+                Replicas
+            </div>
+            <div className="service-details service-bottom-spacing">
+                <Alert variant={alertVariant}>
+                    {props.tasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
+                </Alert>
+            </div>
+            <Button className="service-right-spacing" onClick={props.handleStatClick}>Stats</Button>
+            <Button onClick={props.handleLogClick}>Logs</Button>
         </div>
     )
 }

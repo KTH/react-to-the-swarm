@@ -11,3 +11,48 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.service-header {
+  font-weight: bold;
+}
+
+.sevice-body {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.service-subheader {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.service-details {
+  font-size: 16px;
+}
+
+.service-bottom-spacing {
+  margin-bottom: 10px;
+}
+
+.service-right-spacing {
+  margin-right: 10px;
+}
+
+.log-pre {
+  margin: 0px;
+  line-height: 10px;
+}
+
+.log-code {
+  font-size: 10px;
+  white-space: pre;
+}
+
+.stats-pre {
+  line-height: 12px;
+  margin-bottom: 0px;
+}
+
+.stats-code {
+  font-size: 12px;
+}

@@ -49,10 +49,10 @@ function Service(props) {
     return useObserver(() => (
         <Col key={props.service.ID} xs={12 / props.columns}>
             <Card className="text-dark">
-                <Card.Header style={{fontWeight: 'bold'}}>
+                <Card.Header className="service-header">
                     {JSON.stringify(props.service.Spec.Name).replace(/"/g, '')}
                 </Card.Header>
-                <Card.Body style={{maxHeight: '500px', overflowY: 'auto'}}>
+                <Card.Body className="service-body">
                     <ServiceDetails 
                         tasks={tasks}
                         service={props.service}
