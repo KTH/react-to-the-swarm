@@ -3,24 +3,16 @@ import { Button, Alert } from 'react-bootstrap';
 
 function ServiceDetails(props) {
 
-    const filterRunning = (task) => {
-        return task.Status.State === 'running';
+    const getReplicas = () => {
+        return props.service.Spec.Mode.Replicated.Replicas;
     }
 
-    const filterShutdown = (task) => {
-        return task.Status.State === 'shutdown';
-    }
-
-    const filterFailed = (task) => {
-        return task.Status.State === 'failed';
-    }
-
-    let shutdownTasks = props.tasks.filter(filterShutdown);
-    let runningTasks = props.tasks.filter(filterRunning);
-    let failedTasks = props.tasks.filter(filterFailed);
+    let shutdownTasks = props.tasks.filter(t => t.Status.State === 'shutdown');
+    let runningTasks = props.tasks.filter(t => t.Status.State === 'running');
+    let failedTasks = props.tasks.filter(t => t.Status.State === 'failed');
 
     let alertRunningVariant = 
-        runningTasks.length.toString() === JSON.stringify(props.service.Spec.Mode.Replicated.Replicas) ?
+        runningTasks.length.toString() === JSON.stringify(getReplicas()) ?
         "success" : "danger";
 
     let alertFailedVariant = failedTasks.length > 0 ? "danger" : "success";
@@ -38,7 +30,7 @@ function ServiceDetails(props) {
             </div>
             <div className="service-details">
                 <Alert variant={alertRunningVariant}>
-                    {runningTasks.length} / {JSON.stringify(props.service.Spec.Mode.Replicated.Replicas)}
+                    {runningTasks.length} / {JSON.stringify(getReplicas())}
                 </Alert>
             </div>
             <div className="service-subheader">
